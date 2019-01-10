@@ -1,0 +1,676 @@
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[205]: Found directive in column 1. (LIST)
+                      00001 LIST   P=PIC16F628A
+Warning[205]: Found directive in column 1. (RADIX)
+                      00002 RADIX DEC
+                      00003 
+                      00004 #INCLUDE <P16F628A.INC>         ;ARQUIVO PADR√O MICROCHIP PARA 16F628A
+                      00001         LIST
+                      00002 ; P16F628A.INC  Standard Header File, Version 1.10    Microchip Technology, Inc.
+                      00265         LIST
+                      00266 
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F10           00005 __CONFIG H'3F10'                        ;__CONFIG _INTRC_OSC_NOCLKOUT & _WDT_OFF & _PWRTE_ON & _BODEN_OF
+                            F & _LVP_OFF & _CP_OFF & _MCLRE_OFF & _DATA_CP_OFF
+                      00006 
+                      00007 #DEFINE BANK0   BCF STATUS,RP0  ;SETA BANK 0 DE MEM”RIA
+                      00008 #DEFINE BANK1   BSF STATUS,RP0  ;SETA BANK 1 DE MAM”RIA
+                      00009 
+                      00010 #DEFINE BOTAO           PORTA,2 ;PORTA DO BOT√O
+                      00011                                         ; 0 -> PRESSIONADO
+                      00012                                         ; 1 -> LIBERADO
+                      00013 #DEFINE A_VERM          PORTB,0 ; VERMELHO S1
+                      00014                                         ; 0 -> APAGADO
+                      00015                                         ; 1 -> ACESO
+                      00016 #DEFINE A_AMAR          PORTB,1 ; AMARELO S1
+                      00017                                         ; 0 -> APAGADO
+                      00018                                         ; 1 -> ACESO
+                      00019 #DEFINE A_VERD          PORTB,2 ; VERDE S1
+                      00020                                         ; 0 -> APAGADO
+                      00021                                         ; 1 -> ACESO
+                      00022 #DEFINE B_VERM          PORTB,3 ; VERMELHO S2
+                      00023                                         ; 0 -> APAGADO
+                      00024                                         ; 1 -> ACESO
+                      00025 #DEFINE B_AMAR          PORTB,4 ; AMARELO S2
+                      00026                                         ; 0 -> APAGADO
+                      00027                                         ; 1 -> ACESO
+                      00028 #DEFINE B_VERD          PORTB,5 ; VERDE S2
+                      00029                                         ; 0 -> APAGADO
+                      00030                                         ; 1 -> ACESO
+                      00031 #DEFINE PED_PARA        PORTB,6 ; PARA PEDESTRE
+                      00032                                         ; 0 -> APAGADO
+                      00033                                         ; 1 -> ACESO
+                      00034 #DEFINE PED_VAI         PORTB,7 ; VAI PEDESTRE
+                      00035                                         ; 0 -> APAGADO
+                      00036                                         ; 1 -> ACESO
+                      00037 
+                      00038         CBLOCK  0x20    ;ENDERE«O INICIAL DA MEM”RIA DE USU¡RIO
+                      00039 
+  00000020            00040         CONTADOR1
+  00000021            00041         CONTADOR2
+  00000022            00042         CONTADOR3
+  00000023            00043         CONTADOR4
+  00000024            00044         CONTADOR5
+                      00045 
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000025            00046         FLAGAA          ; FLAG SINAL_A AMARELO
+  00000026            00047         FLAGAB          ; FLAG SINAL_B AMARELO
+                      00048 
+                      00049         ENDC                    ;FIM DO BLOCO DE MEM”RIA
+                      00050 
+0000                  00051         ORG     0x00            ;ENDERE«O INICIAL DE PROCESSAMENTO
+0000   2801           00052         GOTO    INICIO
+                      00053 
+0001                  00054 INICIO
+0001   0185           00055         CLRF    PORTA           ;LIMPA O PORTA
+0002   0186           00056         CLRF    PORTB           ;LIMPA O PORTB
+0003   1683           00057         BANK1                   ;ALTERA PARA O BANCO 1
+0004   3004           00058         MOVLW   B'00000100'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0005   0085           00059         MOVWF   TRISA           ;DEFINE RA2 COMO ENTRADA E DEMAIS COMO SAÕDAS
+0006   3000           00060         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0007   0086           00061         MOVWF   TRISB           ;DEFINE TODO O PORTB COMO SAÕDA
+0008   3000           00062         MOVLW   B'00000000'
+0009   008B           00063         MOVWF   INTCON          ;TODAS AS INTERRUP«’ES DESLIGADAS
+000A   1283           00064         BANK0                   ;RETORNA PARA O BANCO 0
+000B   3007           00065         MOVLW   B'00000111'
+000C   009F           00066         MOVWF   CMCON           ;DEFINE O MODO DO COMPARADOR ANAL”GICO
+                      00067 
+000D                  00068 MAIN
+000D   0186           00069         CLRF PORTB
+                      00070         
+000E   30FF           00071         MOVLW   -1
+000F   00A5           00072         MOVWF   FLAGAA
+                      00073         
+0010   30FF           00074         MOVLW   -1                      ; ATRIBUI 8 AO CONTADOR 3
+0011   00A6           00075         MOVWF   FLAGAB
+                      00076         
+0012   1506           00077         BSF A_VERD
+0013   1586           00078         BSF B_VERM
+0014   1706           00079         BSF PED_PARA
+0015   208C           00080         CALL LOOP1              ; A = VERDE             B = VERMELHO
+0016   208C           00081         CALL LOOP1
+0017   208C           00082         CALL LOOP1
+0018   208C           00083         CALL LOOP1
+0019   208C           00084         CALL LOOP1
+                      00085 
+001A   1106           00086         BCF A_VERD      
+001B   1486           00087         BSF     A_AMAR  ; A = AMARELO           B = VERMELHO
+001C   208C           00088         CALL LOOP1
+001D   208C           00089         CALL LOOP1
+                      00090         
+001E   2858           00091         GOTO TESTAFLAGS1; TESTA SE O SINAL A EST¡ EM AMARELO
+                      00092 
+001F                  00093 VOLTA_MAIN
+                      00094 
+001F   0186           00095         CLRF PORTB
+0020   1406           00096         BSF     A_VERM
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0021   1686           00097         BSF B_VERD
+0022   1706           00098         BSF PED_PARA  ; A = VERMELHO    B = VERDE
+0023   208C           00099         CALL LOOP1
+                      00100 
+0024   1286           00101         BCF B_VERD
+0025   1606           00102         BSF B_AMAR      ; A = VERMELHO          B = AMARELO
+                      00103         ;------------------------------------------------------- aqui 
+0026   208C           00104         CALL LOOP1
+0027   208C           00105         CALL LOOP1
+                      00106         
+0028   285B           00107         GOTO TESTAFLAGS2; TESTA SE O SINAL B EST¡ EM AMARELO
+                      00108 
+                      00109 
+0029                  00110 ACIONA_PED
+                      00111 
+0029   1906           00112         BTFSC A_VERD  ; IF(A_VERD==0) PULA A PROXIMA LINHA
+002A   2834           00113         GOTO AVERDE
+                      00114 
+002B   1886           00115         BTFSC A_AMAR  ; IF(A_AMAR==0) PULA A PROXIMA LINHA
+002C   2840           00116         GOTO AAMARELO; 
+                      00117 
+002D   1806           00118         BTFSC A_VERM  ; IF(A_VERM==0) PULA A PROXIMA LINHA
+002E   282F           00119         GOTO TESTAB   ; A = VERMELHO    B = ?
+                      00120 
+Warning[207]: Found label after column 1. (TESTAB)
+002F                  00121         TESTAB
+002F   1A86           00122                 BTFSC B_VERD  ; IF(B_VERD==0) PULA A PROXIMA LINHA
+0030   2843           00123                 GOTO BVERDE
+                      00124 
+0031   1A06           00125                 BTFSC B_AMAR  ; IF(B_AMAR==0) PULA A PROXIMA LINHA
+0032   284F           00126                 GOTO BAMARELO; 
+0033   2852           00127                 GOTO BVERMELHO; 
+                      00128  
+Warning[207]: Found label after column 1. (AVERDE)
+0034                  00129         AVERDE; SINAL A = VERDE         SINAL B = VERMELHO
+0034   1106           00130                 BCF  A_VERD
+0035   1486           00131                 BSF      A_AMAR
+0036   208C           00132                 CALL LOOP1
+0037   208C           00133                 CALL LOOP1
+0038   1086           00134                 BCF      A_AMAR
+0039   1406           00135                 BSF      A_VERM
+                      00136 
+003A   1306           00137                 BCF  PED_PARA
+003B   1786           00138                 BSF  PED_VAI;;;;;;;;; PASSAGEM PEDESTRE
+003C   208C           00139                 CALL LOOP1
+003D   208C           00140                 CALL LOOP1
+003E   208C           00141                 CALL LOOP1
+003F   2872           00142                 GOTO INVERTE
+                      00143 
+Warning[207]: Found label after column 1. (AAMARELO)
+0040                  00144         AAMARELO; SINAL A = AMARELO             SINAL B = VERMELHO
+0040   3001           00145                 MOVLW   1
+0041   00A5           00146                 MOVWF   FLAGAA  ; FLAG SINAL_A EM AMARELO = 1
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0042   28B4           00147                 GOTO CONTINUA
+                      00148 
+                      00149         
+Warning[207]: Found label after column 1. (BVERDE)
+0043                  00150         BVERDE; SINAL A = VERMELHO              SINAL B = VERDE
+0043   1286           00151                 BCF B_VERD
+0044   1606           00152                 BSF B_AMAR
+0045   208C           00153                 CALL LOOP1
+0046   208C           00154                 CALL LOOP1
+0047   1206           00155                 BCF B_AMAR
+0048   1586           00156                 BSF B_VERM
+                      00157         
+0049   1306           00158                 BCF  PED_PARA
+004A   1786           00159                 BSF  PED_VAI;;;;;;;;; PASSAGEM PEDESTRE
+004B   208C           00160                 CALL LOOP1
+004C   208C           00161                 CALL LOOP1
+004D   208C           00162                 CALL LOOP1
+004E   2872           00163                 GOTO INVERTE
+                      00164 
+Warning[207]: Found label after column 1. (BAMARELO)
+004F                  00165         BAMARELO; SINAL A = VERMELHO            SINAL B = AMARELO
+004F   3001           00166                 MOVLW   1
+0050   00A6           00167                 MOVWF   FLAGAB  ; FLAG SINAL_B EM AMARELO = 1
+0051   28B4           00168                 GOTO CONTINUA
+                      00169 
+Warning[207]: Found label after column 1. (BVERMELHO)
+0052                  00170         BVERMELHO; SINAL A = VERMELHO   SINAL  B = VERMELHO
+0052   1306           00171                 BCF  PED_PARA
+0053   1786           00172                 BSF  PED_VAI;;;;;;;;; PASSAGEM PEDESTRE
+0054   208C           00173                 CALL LOOP1
+0055   208C           00174                 CALL LOOP1
+0056   208C           00175                 CALL LOOP1
+0057   2872           00176                 GOTO INVERTE
+                      00177                 
+Warning[207]: Found label after column 1. (TESTAFLAGS1)
+0058                  00178         TESTAFLAGS1
+Message[305]: Using default destination of 1 (file).
+0058   0BA5           00179                 DECFSZ  FLAGAA ; FLAG SINAL_A EM AMARELO = 1
+0059   281F           00180                 GOTO VOLTA_MAIN ; FLAGAA != 0 -> CONTINUA ROTINA NORMAL NO MAIN 
+005A   285E           00181                 GOTO SETA_FLAGAA        ; FLAGAA = 0
+                      00182 
+Warning[207]: Found label after column 1. (TESTAFLAGS2)
+005B                  00183         TESTAFLAGS2
+Message[305]: Using default destination of 1 (file).
+005B   0BA6           00184                 DECFSZ  FLAGAB
+005C   280D           00185                 GOTO MAIN ; FLAGAA != 0-------RETORNA LOOP 
+005D   2868           00186                 GOTO SETA_FLAGAB        ; FLAGAA = 0 ------NAO, CONTINUA
+                      00187 
+                      00188 
+005E                  00189 SETA_FLAGAA     ; SINAL_A: AMARELO->VERMELHO E DEPOIS INVERTE
+005E   1086           00190         BCF A_AMAR
+005F   1406           00191         BSF A_VERM              ; A = VERMELHO          B = VERMELHO
+0060   1306           00192         BCF PED_PARA
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0061   1786           00193         BSF PED_VAI;;;;;;;;; PASSAGEM PEDESTRE
+0062   30FF           00194         MOVLW -1
+0063   00A5           00195         MOVWF FLAGAA
+0064   208C           00196         CALL LOOP1
+0065   208C           00197         CALL LOOP1
+0066   208C           00198         CALL LOOP1
+0067   2872           00199         GOTO INVERTE
+                      00200 
+0068                  00201 SETA_FLAGAB ; SINAL_B: AMARELO->VERMELHO E DEPOIS INVERTE
+0068   1206           00202         BCF B_AMAR
+0069   1586           00203         BSF B_VERM              ; A = VERMELHO          B = VERMELHO
+006A   1306           00204         BCF PED_PARA
+006B   1786           00205         BSF PED_VAI;;;;;;;;; PASSAGEM PEDESTRE
+006C   30FF           00206         MOVLW -1
+006D   00A5           00207         MOVWF FLAGAA
+006E   208C           00208         CALL LOOP1
+006F   208C           00209         CALL LOOP1
+0070   208C           00210         CALL LOOP1
+0071   2872           00211         GOTO INVERTE
+                      00212  
+0072                  00213 INVERTE
+0072   0186           00214         CLRF PORTB
+0073   1506           00215         BSF      A_VERD         ;SINAL A = VERDE                SINAL B = VERMELHO
+0074   1586           00216         BSF      B_VERM
+0075   1706           00217         BSF      PED_PARA
+0076   208C           00218         CALL LOOP1
+0077   208C           00219         CALL LOOP1
+0078   208C           00220         CALL LOOP1
+                      00221 
+0079   1106           00222         BCF  A_VERD
+007A   1486           00223         BSF      A_AMAR         ;SINAL A = AMARELO              SINAL B = VERMELHO
+007B   208C           00224         CALL LOOP1
+007C   208C           00225         CALL LOOP1
+                      00226 
+007D   1086           00227         BCF      A_AMAR
+007E   1406           00228         BSF      A_VERM         
+007F   1186           00229         BCF  B_VERM
+0080   1686           00230         BSF  B_VERD             ;SINAL A = VERMELHO             SINAL B = VERDE
+0081   208C           00231         CALL LOOP1
+0082   208C           00232         CALL LOOP1
+0083   208C           00233         CALL LOOP1
+0084   1286           00234         BCF  B_VERD
+0085   1606           00235         BSF  B_AMAR             ;SINAL A = VERMELHO             SINAL B = AMARELO
+0086   208C           00236         CALL LOOP1
+0087   208C           00237         CALL LOOP1
+                      00238 
+0088   280D           00239         GOTO MAIN
+                      00240 
+0089                  00241 BOTAO_PRES1
+Message[305]: Using default destination of 1 (file).
+0089   0BA4           00242         DECFSZ  CONTADOR5       ; CONTADOR5 USADO NO DEBOUCING
+008A   28B4           00243         GOTO    CONTINUA        ; CONTADOR5 != 0 
+008B   2829           00244         GOTO    ACIONA_PED  ; CONTADOR5 = 0 
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00245 
+008C                  00246 LOOP1
+Warning[203]: Found opcode in column 1. (NOP)
+008C   0000           00247 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+008D   0000           00248 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+008E   0000           00249 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+008F   0000           00250 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+0090   0000           00251 NOP
+                      00252 
+0091   3000           00253         MOVLW   0
+0092   00A0           00254         MOVWF   CONTADOR1
+0093   3000           00255         MOVLW   0
+0094   00A1           00256         MOVWF   CONTADOR2
+0095   3000           00257         MOVLW   0
+0096   00A2           00258         MOVWF   CONTADOR3
+0097   3000           00259         MOVLW   0
+0098   00A3           00260         MOVWF   CONTADOR4
+0099   3000           00261         MOVLW   0
+009A   00A4           00262         MOVWF   CONTADOR5
+                      00263 
+009B   3008           00264         MOVLW   8
+009C   00A2           00265         MOVWF   CONTADOR3
+009D   209F           00266         CALL    LOOP2
+009E   0008           00267         RETURN
+                      00268 
+009F                  00269 LOOP2
+Warning[203]: Found opcode in column 1. (NOP)
+009F   0000           00270 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A0   0000           00271 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A1   0000           00272 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A2   0000           00273 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A3   0000           00274 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A4   0000           00275 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00A5   0000           00276 NOP
+00A6   300A           00277         MOVLW   10
+00A7   00A0           00278         MOVWF   CONTADOR1
+00A8   3005           00279         MOVLW   5
+00A9   00A4           00280         MOVWF   CONTADOR5       ; CONTADOR PARA TESTAR DEBOUCING
+00AA   20AE           00281         CALL    LOOP3
+Message[305]: Using default destination of 1 (file).
+00AB   0BA2           00282         DECFSZ  CONTADOR3
+00AC   289F           00283         GOTO    LOOP2
+00AD   0008           00284         RETURN
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00285 
+00AE                  00286 LOOP3
+00AE   0000           00287         NOP  ; AT… CHEGAR NESSE PONTO DE NOVO DEMORA 12,5 MS
+00AF   1905           00288         BTFSC   BOTAO   ;O BOT√O EST¡ PRESSIONADO? 0: PRESSIONADO  1: LIBERADO
+00B0   28B2           00289         GOTO REINICIA_CONT5     ; NAO, CONTINUA
+00B1   2889           00290         GOTO BOTAO_PRES1 ; SIM, ENTRA NO TESTE BOTAO_PRES1
+                      00291         ; O TESTE DO BOT√O DEMORA 12,5 MS
+                      00292         ; COMO O DEBOUNCIG DEVE SER NO MÕNIMO 30 MS, USAMOS CONTADOR5
+                      00293         ; CONTADOR5 = 5 - 1 = 4 (12,5MS)
+                      00294         ; CONTADOR5 = 4 - 1 = 3 (25MS)
+                      00295         ; CONTADOR5 = 3 - 1 = 2 (37,5MS)
+                      00296         ; CONTADOR5 = 2 - 1 = 1 (50MS)
+                      00297         ; CONTADOR5 = 1 - 1 = 0 ----> TESTOU O BOT√O: ACIONA OU N√O O SINAL DE PEDESTRE
+                      00298 
+00B2                  00299 REINICIA_CONT5
+00B2   3005           00300         MOVLW 5
+00B3   00A4           00301         MOVWF CONTADOR5
+                      00302         
+00B4                  00303 CONTINUA
+Warning[203]: Found opcode in column 1. (NOP)
+00B4   0000           00304 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00B5   0000           00305 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00B6   0000           00306 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00B7   0000           00307 NOP
+00B8   3028           00308         MOVLW   40
+00B9   00A1           00309         MOVWF   CONTADOR2
+00BA   20BE           00310         CALL    LOOP4
+Message[305]: Using default destination of 1 (file).
+00BB   0BA0           00311         DECFSZ  CONTADOR1
+00BC   28AE           00312         GOTO    LOOP3
+00BD   0008           00313         RETURN
+                      00314 
+00BE                  00315 LOOP4
+Warning[203]: Found opcode in column 1. (NOP)
+00BE   0000           00316 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00BF   0000           00317 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00C0   0000           00318 NOP
+Warning[203]: Found opcode in column 1. (NOP)
+00C1   0000           00319 NOP
+00C2   3064           00320         MOVLW   100
+00C3   00A3           00321         MOVWF   CONTADOR4
+00C4   20C8           00322         CALL    LOOP5
+Message[305]: Using default destination of 1 (file).
+00C5   0BA1           00323         DECFSZ  CONTADOR2
+00C6   28BE           00324         GOTO    LOOP4
+00C7   0008           00325         RETURN
+                      00326 
+00C8                  00327 LOOP5
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[305]: Using default destination of 1 (file).
+00C8   0BA3           00328         DECFSZ  CONTADOR4
+00C9   28C8           00329         GOTO    LOOP5
+00CA   0008           00330         RETURN
+                      00331 
+                      00332         END                     ;OBRIGAT”RIO
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+AAMARELO                          00000040
+ACIONA_PED                        00000029
+ADEN                              00000003
+AVERDE                            00000034
+A_AMAR                            PORTB,1
+A_VERD                            PORTB,2
+A_VERM                            PORTB,0
+BAMARELO                          0000004F
+BANK0                             BCF STATUS,RP0
+BANK1                             BSF STATUS,RP0
+BOTAO                             PORTA,2
+BOTAO_PRES1                       00000089
+BRGH                              00000002
+BVERDE                            00000043
+BVERMELHO                         00000052
+B_AMAR                            PORTB,4
+B_VERD                            PORTB,5
+B_VERM                            PORTB,3
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCPR1H                            00000016
+CCPR1L                            00000015
+CIS                               00000003
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000001F
+CMIE                              00000006
+CMIF                              00000006
+CONTADOR1                         00000020
+CONTADOR2                         00000021
+CONTADOR3                         00000022
+CONTADOR4                         00000023
+CONTADOR5                         00000024
+CONTINUA                          000000B4
+CREN                              00000004
+CSRC                              00000007
+DC                                00000001
+EEADR                             0000009B
+EECON1                            0000009C
+EECON2                            0000009D
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+EEDATA                            0000009A
+EEIE                              00000007
+EEIF                              00000007
+F                                 00000001
+FERR                              00000002
+FLAGAA                            00000025
+FLAGAB                            00000026
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INICIO                            00000001
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+INVERTE                           00000072
+IRP                               00000007
+LOOP1                             0000008C
+LOOP2                             0000009F
+LOOP3                             000000AE
+LOOP4                             000000BE
+LOOP5                             000000C8
+MAIN                              0000000D
+NOT_BO                            00000000
+NOT_BOD                           00000000
+NOT_BOR                           00000000
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+OERR                              00000001
+OPTION_REG                        00000081
+OSCF                              00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PED_PARA                          PORTB,6
+PED_VAI                           PORTB,7
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RBIE                              00000003
+RBIF                              00000000
+RCIE                              00000005
+RCIF                              00000005
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+REINICIA_CONT5                    000000B2
+RP0                               00000005
+RP1                               00000006
+RX9                               00000006
+RX9D                              00000000
+SETA_FLAGAA                       0000005E
+SETA_FLAGAB                       00000068
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1OSCEN                           00000003
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TESTAB                            0000002F
+TESTAFLAGS1                       00000058
+TESTAFLAGS2                       0000005B
+TMR0                              00000001
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISB                             00000086
+TRMT                              00000001
+TX9                               00000006
+TX9D                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXSTA                             00000098
+VOLTA_MAIN                        0000001F
+VR0                               00000000
+VR1                               00000001
+VR2                               00000002
+VR3                               00000003
+VRCON                             0000009F
+VREN                              00000007
+VROE                              00000006
+VRR                               00000005
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CP_OFF                           00003FFF
+_CP_ON                            00001FFF
+_DATA_CP_OFF                      00003FFF
+_DATA_CP_ON                       00003EFF
+_ER_OSC_CLKOUT                    00003FFF
+_ER_OSC_NOCLKOUT                  00003FFE
+_EXTCLK_OSC                       00003FEF
+_HS_OSC                           00003FEE
+_INTOSC_OSC_CLKOUT                00003FFD
+_INTOSC_OSC_NOCLKOUT              00003FFC
+_INTRC_OSC_CLKOUT                 00003FFD
+_INTRC_OSC_NOCLKOUT               00003FFC
+_LP_OSC                           00003FEC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_MCLRE_OFF                        00003FDF
+_MCLRE_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC_CLKOUT                    00003FFF
+_RC_OSC_NOCLKOUT                  00003FFE
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FED
+__16F628A                         00000001
+__DEBUG                           1
+MPASM  5.35                  VERS„O FINAL.ASM   11-21-2015  18:06:53         PAGE 13
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+00C0 : XXXXXXXXXXX----- ---------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   203
+Program Memory Words Free:  1845
+
+
+Errors   :     0
+Warnings :    31 reported,     0 suppressed
+Messages :     9 reported,     0 suppressed
+
+

@@ -1,0 +1,78 @@
+MPLINK 4.35, Linker
+Linker Map File - Created Sat Nov 21 18:06:54 2015
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000196
+.config_2007_VERS„O FINAL.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x0000ca      
+                            0x002007    0x002007      
+            204 out of 2183 program addresses used, program memory utilization is 9%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                 AAMARELO   0x000040    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+               ACIONA_PED   0x000029    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   AVERDE   0x000034    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                 BAMARELO   0x00004f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              BOTAO_PRES1   0x000089    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   BVERDE   0x000043    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                BVERMELHO   0x000052    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                 CONTINUA   0x0000b4    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   INICIO   0x000001    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                  INVERTE   0x000072    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP1   0x00008c    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP2   0x00009f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP3   0x0000ae    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP4   0x0000be    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP5   0x0000c8    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                     MAIN   0x00000d    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+           REINICIA_CONT5   0x0000b2    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              SETA_FLAGAA   0x00005e    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              SETA_FLAGAB   0x000068    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   TESTAB   0x00002f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              TESTAFLAGS1   0x000058    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              TESTAFLAGS2   0x00005b    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+               VOLTA_MAIN   0x00001f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   INICIO   0x000001    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                     MAIN   0x00000d    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+               VOLTA_MAIN   0x00001f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+               ACIONA_PED   0x000029    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   TESTAB   0x00002f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   AVERDE   0x000034    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                 AAMARELO   0x000040    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                   BVERDE   0x000043    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                 BAMARELO   0x00004f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                BVERMELHO   0x000052    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              TESTAFLAGS1   0x000058    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              TESTAFLAGS2   0x00005b    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              SETA_FLAGAA   0x00005e    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              SETA_FLAGAB   0x000068    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                  INVERTE   0x000072    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+              BOTAO_PRES1   0x000089    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP1   0x00008c    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP2   0x00009f    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP3   0x0000ae    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+           REINICIA_CONT5   0x0000b2    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                 CONTINUA   0x0000b4    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP4   0x0000be    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+                    LOOP5   0x0000c8    program     static C:\Users\Bruna\Desktop\TI - AOC II\00 SEM¡FORO\Sem·foro Final\Vers„o FINAL.asm
+
+
